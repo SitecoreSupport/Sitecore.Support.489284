@@ -3,9 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Sitecore.DependencyInjection;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.XA.Foundation.Abstractions;
+using Sitecore.XA.Foundation.Multisite;
 using Sitecore.XA.Foundation.Multisite.Extensions;
 
-namespace Sitecore.XA.Foundation.Multisite.Pipelines.HttpRequest
+namespace Sitecore.Support.XA.Foundation.Multisite.Pipelines.HttpRequest
 {
     public class StoreSiteNameInCookie : HttpRequestProcessor
     {
@@ -14,6 +15,10 @@ namespace Sitecore.XA.Foundation.Multisite.Pipelines.HttpRequest
         public override void Process(HttpRequestArgs args)
         {
             if (args.Context.Response.HeadersWritten)
+            {
+                return;
+            }
+            if (!ServiceLocator.ServiceProvider.GetService<IContext>().Site.IsSxaSite())
             {
                 return;
             }
